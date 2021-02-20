@@ -4,12 +4,12 @@ def content_data_to_json(content, owner_name)
               "id": content['id'],
               "type": "content",
               "attributes": {
-                  "projectId": content['project_id'],
+                  "projectId": content.project_id,
                   "projectOwnerName": owner_name,
-                  "title": content['title'],
-                  "body": content['body'],
-                  "createdAt": content['created_at'],
-                  "updatedAt": content['created_at']
+                  "title": content.title,
+                  "body": content.body,
+                  "createdAt": content.created_at,
+                  "updatedAt": content.created_at
             }
           }
       }
@@ -20,15 +20,15 @@ def content_list_data_to_json(content_list)
     content_list.each do |content|
         user = User.find_by_id(content.user_id)
         content_json_data = {
-            "id": content['id'],
+            "id": content.id,
             "type": "content",
             "attributes": {
-                "projectId": content['project_id'],
-                "projectOwnerName": "#{user['firstName']} #{user['lastName']}",
-                "title": content['title'],
-                "body": content['body'],
-                "createdAt": content['created_at'],
-                "updatedAt": content['created_at']
+                "projectId": content.project_id,
+                "projectOwnerName": "#{user.firstName} #{user.lastName}",
+                "title": content.title,
+                "body": content.body,
+                "createdAt": content.created_at,
+                "updatedAt": content.created_at
           }
         }
         content_list_json.push(content_json_data)
