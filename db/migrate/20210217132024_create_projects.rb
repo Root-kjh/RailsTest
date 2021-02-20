@@ -5,9 +5,9 @@ class CreateProjects < ActiveRecord::Migration[6.1]
       t.belongs_to :user
       t.string :title, null: false
       t.text :description
-      t.integer :type, null: false
+      t.integer :projectType, null: false
       t.string :location, null: false
-      t.string :thumbnail, null: false
+      t.string :thumbnail , null: false
       t.timestamps
     end
   end

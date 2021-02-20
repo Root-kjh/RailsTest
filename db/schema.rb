@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2021_02_17_132033) do
     t.integer "user_id"
     t.string "title", null: false
     t.text "description"
-    t.integer "type", null: false
+    t.integer "projectType", null: false
     t.string "location", null: false
     t.string "thumbnail", null: false
     t.datetime "created_at", precision: 6, null: false

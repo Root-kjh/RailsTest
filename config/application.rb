@@ -10,7 +10,14 @@ module RailsTest
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
+
+    # use lib file
     config.autoload_paths << "#{Rails.root}/lib"
+
+    # use image uploader
+    require 'carrierwave'
+    require 'carrierwave/orm/activerecord'
+    
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

@@ -1,7 +1,6 @@
 class  Api::V1::UserTokenController < Knock::AuthTokenController
   skip_before_action :verify_authenticity_token, raise: false
-  #before_action :authenticate
-  
+    
   require './lib/controllers/users/user_data_to_json'
 
   def create
