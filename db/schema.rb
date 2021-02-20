@@ -13,13 +13,18 @@
 ActiveRecord::Schema.define(version: 2021_02_17_132033) do
 
   create_table "contents", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "project_id"
     t.string "title", null: false
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_contents_on_project_id"
+    t.index ["user_id"], name: "index_contents_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
+    t.integer "user_id"
     t.string "title", null: false
     t.text "description"
     t.integer "type", null: false
@@ -27,14 +32,15 @@ ActiveRecord::Schema.define(version: 2021_02_17_132033) do
     t.string "thumbnail", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "firstName", null: false
     t.string "lastName", null: false
     t.string "email", null: false
-    t.string "password", null: false
-    t.string "contry"
+    t.string "password_digest", null: false
+    t.string "country"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
