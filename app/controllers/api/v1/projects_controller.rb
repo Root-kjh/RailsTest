@@ -1,17 +1,18 @@
 class Api::V1::ProjectsController < ActionController::API
     include Knock::Authenticable
     before_action :authenticate_user, except: [:getAllProjects, :getProject]
+    before_action :get_current_user_name, only: [:createProject, :updateProject]
     skip_before_action :verify_authenticity_token, raise: false
     
     require './lib/controllers/projects/project_data_to_json'
     
-    def createPost
+    def createProject
         type_to_int
         project = Project.new(projects_params)
         project.user_id = current_user.id
 
         if project.save
-            render(json: project_data_to_json(project, get_owner_name(current_user.id)), status: :created)
+            render(json: project_data_to_json(project, @current_user_name), status: :created)
         else
             render(json: project.errors, status: :bad_request)
         end
@@ -31,24 +32,27 @@ class Api::V1::ProjectsController < ActionController::API
         if project
             render(json: project_data_to_json(project, get_owner_name(project.user_id)))
         else
-            render(json: project.errors, status: :bad_request)
+            render(json: {"message": "project not found"}, status: :bad_request)
         end
     end
 
     def updateProject
         type_to_int
         project = Project.where(user_id: current_user.id, id: params[:id]).first
-        project.title = params[:title]
-        project.description = params[:description]
-        project.projectType = params[:projectType]
-        project.location = params[:location]
-        puts(params[:thumbnail])
-        project.thumbnail = params[:thumbnail]
+        if project.present?
+            project.title = params[:title]
+            project.description = params[:description]
+            project.projectType = params[:projectType]
+            project.location = params[:location]
+            project.thumbnail = params[:thumbnail]
 
-        if project.save
-            render(json: project_data_to_json(project, get_owner_name(current_user.id)), status: :created)
+            if project.save
+                render(json: project_data_to_json(project, @current_user_name), status: :created)
+            else
+                render(json: project.errors, status: :bad_request)
+            end
         else
-            render(json: project.errors, status: :bad_request)
+            render(json: {"message": "project not found"}, status: :bad_request)
         end
     end
 
@@ -63,6 +67,10 @@ class Api::V1::ProjectsController < ActionController::API
     end
 
     private
+
+    def get_current_user_name
+        @current_user_name = get_owner_name(current_user.id)
+    end
 
     def get_owner_name(user_id)
         user = User.find_by_id(user_id)
