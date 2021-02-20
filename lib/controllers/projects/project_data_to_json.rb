@@ -4,14 +4,14 @@ def project_data_to_json(project, owner_name)
             "id": project['id'],
             "type": "project",
             "attributes": {
-                "title": project['title'],
-                "thumbnail": project['thumbnail'],
-                "description": project['description'],
-                "location": project['location'],
-                "type": project_type_to_string(project['type']),
+                "title": project.title,
+                "thumbnail": project.thumbnail.url,
+                "description": project.description,
+                "location": project.location,
+                "type": project_type_to_string(project.projectType),
                 "ownerName": owner_name,
-                "createdAt": project['created_at'],
-                "updatedAt": project['updated_at']
+                "createdAt": project.created_at,
+                "updatedAt": project.updated_at
             }
         }
     }
@@ -25,14 +25,14 @@ def project_list_data_to_json(project_list)
             "id": project['id'],
             "type": "project",
             "attributes": {
-                "title": project['title'],
-                "thumbnail": project['thumbnail'],
-                "description": project['description'],
-                "location": project['location'],
-                "type": project_type_to_string(project['type']),
-                "ownerName": "#{user['firstName']} #{user['lastName']}",
-                "createdAt": project['created_at'],
-                "updatedAt": project['updated_at']
+                "title": project.title,
+                "thumbnail": project.thumbnail.url,
+                "description": project.description,
+                "location": project.location,
+                "type": project_type_to_string(project.projectType),
+                "ownerName": "#{user.firstName} #{user.lastName}",
+                "createdAt": project.created_at,
+                "updatedAt": project.updated_at
             }
         }
         project_list_json.push(project_json_data)

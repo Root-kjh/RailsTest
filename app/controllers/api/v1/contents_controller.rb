@@ -35,7 +35,8 @@ class Api::V1::ContentsController < ActionController::API
     def updateContent
         content = Content.where(id: params[:id], user_id: current_user.id).first
         if content.present?
-            if content.update(content_params)
+            if content.upd
+                ate(content_params)
                 render(json: content_data_to_json(content, @current_user_name))
             else
                 render(json: content.error, status: :bad_request)

@@ -4,17 +4,23 @@ class Api::V1::ProjectsController < ActionController::API
     before_action :get_current_user_name, only: [:createProject, :updateProject]
     skip_before_action :verify_authenticity_token, raise: false
     
+    require 'open-uri'
     require './lib/controllers/projects/project_data_to_json'
-    
+    require 'mimemagic'
+
     def createProject
         type_to_int
         project = Project.new(projects_params)
-        project.user_id = current_user.id
-
-        if project.save
-            render(json: project_data_to_json(project, @current_user_name), status: :created)
+        if not is_image(params[:thumbnail])
+            render(json: {"message": "not image file"}, status: :bad_request)
         else
-            render(json: project.errors, status: :bad_request)
+            project.user_id = current_user.id
+
+            if project.save
+                render(json: project_data_to_json(project, @current_user_name), status: :created)
+            else
+                render(json: project.errors, status: :bad_request)
+            end
         end
     end
 
@@ -29,6 +35,7 @@ class Api::V1::ProjectsController < ActionController::API
 
     def getProject
         project = Project.find_by_id(params[:id])
+        puts(project.thumbnail.url)
         if project
             render(json: project_data_to_json(project, get_owner_name(project.user_id)))
         else
@@ -44,7 +51,14 @@ class Api::V1::ProjectsController < ActionController::API
             project.description = params[:description]
             project.projectType = params[:projectType]
             project.location = params[:location]
-            project.thumbnail = params[:thumbnail]
+            if params[:thumbnail].present?
+                thumbnail = open(params[:thumbnail])
+                if thumbnail.present? and is_image(thumbnail)
+                    project.thumbnail = thumbnail
+                else
+                    render(json: {"message": "not image file"}, status: :bad_request)
+                end
+            end
 
             if project.save
                 render(json: project_data_to_json(project, @current_user_name), status: :created)
@@ -67,6 +81,11 @@ class Api::V1::ProjectsController < ActionController::API
     end
 
     private
+
+    def is_image(file)
+        file_type = MimeMagic.by_magic(file).type
+        return file_type.include? "image"
+    end
 
     def get_current_user_name
         @current_user_name = get_owner_name(current_user.id)

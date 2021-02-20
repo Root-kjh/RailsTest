@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'uploader/Thumbnail'
 
   namespace :api do
     namespace :v1 do
