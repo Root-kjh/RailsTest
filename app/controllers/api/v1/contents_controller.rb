@@ -18,14 +18,18 @@ class Api::V1::ContentsController < ActionController::API
     end
 
     def getContents
-        content_list = Content.where(project_id: params[:project_id])
-        render(json: content_list_data_to_json(content_list))
+        if Project.find_by_id(params[:project_id]).present?
+            content_list = Content.where(project_id: params[:project_id])
+            render(json: content_list_data_to_json(content_list))
+        else
+            render(json: {"message": "project not found"}, status: :bad_request)
+        end
     end
 
     def getSpecificContent
         content = Content.where(project_id: params[:project_id], id: params[:id]).first
-        owner_name = get_owner_name(content.user_id)
         if content.present?
+            owner_name = get_owner_name(content.user_id)
             render(json: content_data_to_json(content, owner_name))
         else
             render(json: {"message": "content not found"}, status: :bad_request)
@@ -35,8 +39,7 @@ class Api::V1::ContentsController < ActionController::API
     def updateContent
         content = Content.where(id: params[:id], user_id: current_user.id).first
         if content.present?
-            if content.upd
-                ate(content_params)
+            if content.update(content_params)
                 render(json: content_data_to_json(content, @current_user_name))
             else
                 render(json: content.error, status: :bad_request)

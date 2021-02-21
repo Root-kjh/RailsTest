@@ -11,11 +11,10 @@ class Api::V1::ProjectsController < ActionController::API
     def createProject
         type_to_int
         project = Project.new(projects_params)
-        if not is_image(params[:thumbnail])
+        if params[:thumbnail].present? and not is_image(params[:thumbnail])
             render(json: {"message": "not image file"}, status: :bad_request)
         else
             project.user_id = current_user.id
-
             if project.save
                 render(json: project_data_to_json(project, @current_user_name), status: :created)
             else
@@ -35,7 +34,6 @@ class Api::V1::ProjectsController < ActionController::API
 
     def getProject
         project = Project.find_by_id(params[:id])
-        puts(project.thumbnail.url)
         if project
             render(json: project_data_to_json(project, get_owner_name(project.user_id)))
         else

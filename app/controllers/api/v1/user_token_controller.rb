@@ -6,6 +6,5 @@ class  Api::V1::UserTokenController < Knock::AuthTokenController
   def create
     user = User.find_by email: auth_params[:email]
     render(json: user_data_to_json(user, auth_token.token))
-
   end
 end
