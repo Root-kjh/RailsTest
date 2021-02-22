@@ -117,4 +117,12 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+  # fix Unauthorized error on production level
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
+  config.token_secret_signature_key =-> { Rails.application.credentials.secret_key_base }
+
+  #use thumbnail upload folder
+  config.public_file_server.enabled = true
+
 end
