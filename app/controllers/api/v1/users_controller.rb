@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-    protect_from_forgery unless: -> { request.format.json? }
+    skip_before_action :verify_authenticity_token, raise: false
 
     require './lib/controllers/users/user_data_to_json'
 

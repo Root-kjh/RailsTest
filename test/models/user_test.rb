@@ -13,7 +13,18 @@ class UserTest < ActiveSupport::TestCase
    assert user.save, 'Failed to save'
   end
 
-  test "user validation" do
+  test "user email format vaildate" do
+    user = User.new({
+     "firstName": "John",
+     "lastName": "Doe",
+     "email": "not_email.com",
+     "password": "complex_password",
+     "country": "USA"
+   })
+    assert !user.save, 'Failed to email format vaildate'
+   end
+
+  test "user validate" do
     user = User.new({
       'firstName': "",
       'lastName': "",
@@ -22,7 +33,7 @@ class UserTest < ActiveSupport::TestCase
       'country': ""
     })
     assert !user.save, "Failed to vaildate"
-    assert_equal user.errors.size, 4, "Failed to validate count"
+    assert_equal user.errors.size, 5, "Failed to validate count"
   end
 
   test "user email unique" do
