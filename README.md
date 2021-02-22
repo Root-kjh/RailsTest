@@ -13,6 +13,10 @@ gem 'knock', git: 'https://github.com/nsarno/knock', branch: 'master', ref: '921
 gem 'carrierwave'
 ```
 
+The reasons for using knockgem as the corresponding version are as follows.
+
+* There was an error when using the authenticate_user method on the controller, and it was to fix it.
+
 ## API Documentation(Post man JSON Document)
     
 ```json
@@ -1027,11 +1031,6 @@ gem 'carrierwave'
 	]
 }
 ```
-
-
-The reasons for using knockgem as the corresponding version are as follows.
-
-* There was an error when using the authenticate_user method on the controller, and it was to fix it.
 
 ## steps that are necessary
 
